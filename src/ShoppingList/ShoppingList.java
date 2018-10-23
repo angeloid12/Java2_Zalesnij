@@ -21,7 +21,7 @@ public class ShoppingList {
              userNumber = getNumberFromUser();
             } catch (Exception ex){
                 System.out.println("Please, choose correct number from 1 to 4");
-                userNumber = getNumberFromUser();
+                continue;
             }
 
                switch (userNumber) {
