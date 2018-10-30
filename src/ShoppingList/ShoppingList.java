@@ -4,12 +4,23 @@ import java.util.*;
 
 
 public class ShoppingList {
-    static List <String> shoppingList = new ArrayList();
+
+    static List <Product> shoppingList = new ArrayList();
     static int userNumber;
 
     public static void main(String[] args) {
-        System.out.println("Welcome to the shopping list!" );
 
+        Database database = new InMemoryDB();
+
+        AddItemService addItemService = new AddItemService(database);
+        RemoveItemService removeItemService = new RemoveItemService(database);
+        PrintListService printListService = new PrintListService(database);
+
+        AddItemView addItemView = new AddItemView(addItemService);
+        RemoveItemView removeItemView = new RemoveItemView(removeItemService);
+        PrintListView printListView = new PrintListView(printListService);
+
+        System.out.println("Welcome to the shopping list!" );
         while(userNumber != 4) {
             System.out.println("Please, press key 1-4 to choose the action!");
             System.out.println("1: Add item");
@@ -26,13 +37,13 @@ public class ShoppingList {
 
                switch (userNumber) {
                     case 1:
-                        addItem();
+                        addItemView.execute();
                         break;
                     case 2:
-                        removeItem();
+                        removeItemView.execute();
                         break;
                     case 3:
-                        printList();
+                        printListView.execute();
                         break;
                     case 4:
                         System.out.println("Bye!");
@@ -41,42 +52,6 @@ public class ShoppingList {
                         System.out.println("Please, choose correct number from 1 to 4");
                 }
         }
-    }
-
-    public static void addItem(){
-        System.out.println("Please, type the item's name that you want to add:");
-        String s = getStringFromUser();
-        shoppingList.add(s);
-        System.out.println("Item " + s + " is added");
-    }
-
-    public static void removeItem(){
-        System.out.println("Please, type the item's name that you want to remove:");
-        String s = getStringFromUser();
-        if(shoppingList.contains(s)){
-            shoppingList.remove(s);
-            System.out.println("Item " + s + " is removed");
-        } else {
-            System.out.println("Item is not found");
-        }
-    }
-
-    public static void printList(){
-        if(shoppingList.isEmpty()){
-            System.out.println("The list is empty\n");
-        } else {
-            System.out.println("The list contains following items:");
-            for (String s : shoppingList) {
-                System.out.println(s);
-            }
-            System.out.println();
-        }
-    }
-
-    public static String getStringFromUser(){
-        Scanner scanner = new Scanner(System.in);
-        String userString = scanner.nextLine();
-        return userString;
     }
 
     public static int getNumberFromUser(){
